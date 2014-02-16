@@ -9,6 +9,9 @@ import (
 	"github.com/soniakeys/multiset"
 )
 
+// Most examples here depend on deterministic ordering of small maps.
+// This works in Go 1.2 but may break in the future.
+
 func ExampleMultiset() {
 	// Construct from a map literal.
 	m := multiset.Multiset{"a": 2, "b": 1}
