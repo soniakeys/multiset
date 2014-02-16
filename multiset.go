@@ -204,11 +204,9 @@ func Intersect(a ...Multiset) Multiset {
 		}
 	}
 	a[0], a[min] = a[min], a[0]
-a0: // intersect the rest
+a0:
 	for e, c := range a[0] {
-		if c <= 0 {
-			continue
-		}
+		// intersect the rest
 		for _, m2 := range a[1:] {
 			c2 := m2[e]
 			if c2 <= 0 {
