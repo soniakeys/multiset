@@ -20,6 +20,14 @@ func ExampleMultiset() {
 	// [a a b]
 }
 
+func ExampleMultiset_String() {
+	m := multiset.Multiset{"a": 2, "b": 1}
+	s := m.String()
+	fmt.Println(s)
+	// Output:
+	// [a a b]
+}
+
 func ExampleMultiset_Format() {
 	m := multiset.Multiset{"a": 2, "b": 1}
 	fmt.Println(m)         // Default format.
