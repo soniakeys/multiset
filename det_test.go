@@ -72,8 +72,9 @@ func TestMultiset_Union(t *testing.T) {
 }
 
 func TestUnion(t *testing.T) {
-	m1 := multiset.Multiset{"a": 2, "b": 1}
-	m2 := multiset.Multiset{}
+	eqs(t, multiset.Union(), "[]")
+	m1 := multiset.Multiset{}
+	m2 := multiset.Multiset{"a": 2, "b": 1}
 	m3 := multiset.Multiset{"b": 3, "c": 1}
 	eqs(t, multiset.Union(m1, m2, m3), "[a a b b b c]")
 }
@@ -81,20 +82,21 @@ func TestUnion(t *testing.T) {
 func TestMultiset_IntersectElement(t *testing.T) {
 	m := multiset.Multiset{"a": 2, "b": 1}
 	m.IntersectElement("a", 1)
-	m.IntersectElement("c", 1)
-	eqs(t, m, "[a b]")
+	m.IntersectElement("b", 0)
+	eqs(t, m, "[a]")
 }
 
 func TestMultiset_Intersect(t *testing.T) {
-	m := multiset.Multiset{"a": 2, "b": 1}
-	m2 := multiset.Multiset{"b": 3, "c": 1}
+	m := multiset.Multiset{"a": 2, "b": 3}
+	m2 := multiset.Multiset{"b": 2, "c": 1}
 	m.Intersect(m2)
-	eqs(t, m, "[b]")
+	eqs(t, m, "[b b]")
 }
 
 func TestIntersect(t *testing.T) {
-	m1 := multiset.Multiset{"a": 2, "b": 1}
-	m2 := multiset.Multiset{"b": 2}
+	eqs(t, multiset.Intersect(), "[]")
+	m1 := multiset.Multiset{"a": 2, "b": 1, "c": 2}
+	m2 := multiset.Multiset{"a": 2, "b": 3}
 	m3 := multiset.Multiset{"b": 3, "c": 1}
 	eqs(t, multiset.Intersect(m1, m2, m3), "[b]")
 }
@@ -117,11 +119,15 @@ func TestSubset(t *testing.T) {
 func TestEqual(t *testing.T) {
 	m1 := multiset.Multiset{"a": 2}
 	m2 := multiset.Multiset{"a": 2, "b": 1}
-	m3 := multiset.Multiset{"b": 1, "a": 2}
+	m3 := multiset.Multiset{"a": 2, "c": 1}
+	m4 := multiset.Multiset{"b": 1, "a": 2}
 	if multiset.Equal(m1, m2) != false {
 		t.Fatal(m1, m2)
 	}
-	if multiset.Equal(m2, m3) != true {
+	if multiset.Equal(m2, m3) != false {
+		t.Fatal(m2, m3)
+	}
+	if multiset.Equal(m2, m4) != true {
 		t.Fatal(m2, m3)
 	}
 }
@@ -148,8 +154,9 @@ func TestMultiset_AddCount(t *testing.T) {
 }
 
 func TestSum(t *testing.T) {
-	m1 := multiset.Multiset{"a": 2, "b": 1}
-	m2 := multiset.Multiset{"b": 1}
+	eqs(t, multiset.Sum(), "[]")
+	m1 := multiset.Multiset{"b": 1}
+	m2 := multiset.Multiset{"a": 2, "b": 1}
 	m3 := multiset.Multiset{"b": 2, "c": 1}
 	eqs(t, multiset.Sum(m1, m2, m3), "[a a b b b b c]")
 }
