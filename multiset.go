@@ -35,6 +35,11 @@ import (
 // A Multiset is a named type for a Go map.
 type Multiset map[interface{}]int
 
+// String formats a Multiset with default formatting.
+func (m Multiset) String() string {
+	return fmt.Sprint(m)
+}
+
 // Format is a custom formatter, not normally called directly.
 //
 // Default formatting of Multisets prints elements repeated by their counts,
