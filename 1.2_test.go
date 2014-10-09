@@ -137,6 +137,20 @@ func ExampleIntersect() {
 	// [b]
 }
 
+func ExampleIntersectionCardinality() {
+	m1 := multiset.Multiset{"a": 2, "b": 1}
+	m2 := multiset.Multiset{"b": 2}
+	m3 := multiset.Multiset{"b": 3, "c": 1}
+	fmt.Println(m1, "∩", m2, "∩", m3)
+	i := multiset.Intersect(m1, m2, m3)
+	fmt.Println(i, i.Cardinality())
+	fmt.Println(multiset.IntersectionCardinality(m1, m2, m3))
+	// Output:
+	// [a a b] ∩ [b b] ∩ [b b b c]
+	// [b] 1
+	// 1
+}
+
 func ExampleSubset() {
 	m1 := multiset.Multiset{"a": 2}
 	m2 := multiset.Multiset{"a": 2, "b": 1}

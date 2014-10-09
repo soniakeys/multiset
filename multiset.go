@@ -209,6 +209,7 @@ func Intersect(a ...Multiset) Multiset {
 			min = i + 1
 		}
 	}
+	// TEST should this be unswapped at the end?
 	a[0], a[min] = a[min], a[0]
 a0:
 	for e, c := range a[0] {
@@ -225,6 +226,41 @@ a0:
 		m[e] = c
 	}
 	return m
+}
+
+// IntersectionCardinality returns the cardinality of the intersection of
+// its arguments.
+//
+// It is more efficient than Intersect().Cardinality().
+func IntersectionCardinality(a ...Multiset) (c int) {
+	if len(a) == 0 {
+		return
+	}
+	// pick smallest as minimal set
+	min := 0
+	minl := len(a[0])
+	for i, m := range a[1:] {
+		if len(m) < minl {
+			minl = len(m)
+			min = i + 1
+		}
+	}
+	a[0], a[min] = a[min], a[0]
+a0:
+	for e, ce := range a[0] {
+		// intersect the rest
+		for _, m2 := range a[1:] {
+			c2 := m2[e]
+			if c2 <= 0 {
+				continue a0
+			}
+			if c2 < ce {
+				ce = c2
+			}
+		}
+		c += ce
+	}
+	return
 }
 
 // Subset returns true if m1 is a multiset subset of m2.

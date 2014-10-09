@@ -12,8 +12,15 @@ import (
 	"github.com/soniakeys/multiset"
 )
 
+// This file contains deterministic tests that sort results to deal with
+// the random ordering of go maps.
+//
+// Also a goal is for this file provide 100% test coverage.
+
 // eq orders a formatted result and validates it against an expected result.
 // expected must be ordered.  (It works with these simple test cases anyway.)
+// (well, sort of.  it defeats the line number reporting of go test.  that's
+// probably fine for these little tests.  could be improved though.)
 func eq(t *testing.T, result, expected string) {
 	last := len(result) - 1
 	s := strings.Fields(result[1:last])
@@ -99,6 +106,20 @@ func TestIntersect(t *testing.T) {
 	m2 := multiset.Multiset{"a": 2, "b": 3}
 	m3 := multiset.Multiset{"b": 3, "c": 1}
 	eqs(t, multiset.Intersect(m1, m2, m3), "[b]")
+}
+
+func TestIntersectionCardinality(t *testing.T) {
+	want := 0
+	if got := multiset.IntersectionCardinality(); got != want {
+		t.Fatal("got", got, "want", want)
+	}
+	m1 := multiset.Multiset{"a": 2, "b": 1, "c": 2}
+	m2 := multiset.Multiset{"a": 2, "b": 3}
+	m3 := multiset.Multiset{"b": 3, "c": 1}
+	want = 1
+	if got := multiset.IntersectionCardinality(m1, m2, m3); got != want {
+		t.Fatal("got", got, "want", want)
+	}
 }
 
 func TestSubset(t *testing.T) {
