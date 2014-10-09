@@ -41,11 +41,11 @@ func TestMultiset_Format(t *testing.T) {
 	eq(t, fmt.Sprintf("%#v", m), "[a:2 b:1]")    // alternate format
 }
 
-func TestMultiset_SetCount(t *testing.T) {
+func TestMultiset_AssignCount(t *testing.T) {
 	m := multiset.Multiset{"a": 2, "b": 1}
-	m.SetCount("a", 0)
-	m.SetCount("b", 3)
-	m.SetCount("c", 1)
+	m.AssignCount("a", 0)
+	m.AssignCount("b", 3)
+	m.AssignCount("c", 1)
 	eqs(t, m, "[b b b c]")
 }
 

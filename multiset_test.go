@@ -39,12 +39,12 @@ func ExampleMultiset_Format() {
 	// [a:2 b:1]
 }
 
-func ExampleMultiset_SetCount() {
+func ExampleMultiset_AssignCount() {
 	m := multiset.Multiset{"a": 2, "b": 1}
 	fmt.Println(m)
-	m.SetCount("a", 0)
-	m.SetCount("b", 3)
-	m.SetCount("c", 1)
+	m.AssignCount("a", 0)
+	m.AssignCount("b", 3)
+	m.AssignCount("c", 1)
 	fmt.Println(m)
 	// Output:
 	// [a a b]

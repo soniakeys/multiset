@@ -19,7 +19,7 @@
 // Multisets can be constructed and manipulated just as with any other map.
 // No constructor function is provided.  Use Multiset{} or make(Multiset) to
 // construct an empty Multiset.  Consider adding single elements with methods
-// SetCount, UnionCount, or AddElementCount, which are all written to
+// AssignCount, UnionCount, or AddElementCount, which are all written to
 // maintain normal Multisets.  If you operate on a Multiset directly with
 // Go assignments for example, consider calling Normalize afterward to ensure
 // a normal Multiset.
@@ -76,13 +76,13 @@ func (m Multiset) Format(f fmt.State, c rune) {
 	fmt.Fprint(f, "]")
 }
 
-// SetCount sets the count of element e to the value c.
+// AssignCount assigns the count of element e the value c.
 //
 // If element e is not in the Multiset, it is added.
 //
 // This method is safe for zero or negative values of c.  If c is zero or
 // negative, e is removed from m.
-func (m Multiset) SetCount(e interface{}, c int) {
+func (m Multiset) AssignCount(e interface{}, c int) {
 	if c <= 0 {
 		delete(m, e)
 		return
@@ -264,7 +264,7 @@ func (m Multiset) Cardinality() int {
 // decrease the element count.  If the resulting count would be zero or
 // negative, the element is removed.
 func (m Multiset) AddElementCount(e interface{}, dc int) {
-	m.SetCount(e, m[e]+dc)
+	m.AssignCount(e, m[e]+dc)
 }
 
 // AddCount sets the receiver m to the multiset sum of m and its
@@ -315,7 +315,7 @@ func Sum(a ...Multiset) Multiset {
 // the element is removed from m.
 func (m Multiset) SubtractCount(m2 Multiset) {
 	for e, c := range m2 {
-		m.SetCount(e, m[e]-c)
+		m.AssignCount(e, m[e]-c)
 	}
 }
 
