@@ -13,7 +13,7 @@ import (
 )
 
 // eq orders a formatted result and validates it against an expected result.
-// expected must be ordered.
+// expected must be ordered.  (It works with these simple test cases anyway.)
 func eq(t *testing.T, result, expected string) {
 	last := len(result) - 1
 	s := strings.Fields(result[1:last])

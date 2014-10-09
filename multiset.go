@@ -25,6 +25,12 @@
 // a normal Multiset.
 //
 // Formatted output of Multisets uses a custom formatter.  See method Format.
+//
+// With Go 1.3 and later, examples are for documentation purposes only and are
+// not executed by go test.  They worked under Go 1.2 because of a quirk that
+// the order of small maps was not randomized.  Oh, it could be addressed in
+// fancier ways, but it's work...  Anyway, mathematically, elements aren't
+// even required to be orderable, only testable for equality.
 package multiset
 
 import (

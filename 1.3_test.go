@@ -1,6 +1,12 @@
 // Copyright 2014 Sonia Keys
 // License MIT: http://opensource.org/licenses/MIT
 
+//+build go1.3
+
+// Examples here depend on deterministic ordering of small maps.
+// They worked in Go 1.2 but fail with Go 1.3 and later.
+// They are shown here in the interest of simple documentation.
+
 package multiset_test
 
 import (
@@ -9,14 +15,11 @@ import (
 	"github.com/soniakeys/multiset"
 )
 
-// Most examples here depend on deterministic ordering of small maps.
-// This works in Go 1.2 but may break in the future.
-
 func ExampleMultiset() {
 	// Construct from a map literal.
 	m := multiset.Multiset{"a": 2, "b": 1}
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 }
 
@@ -24,7 +27,7 @@ func ExampleMultiset_String() {
 	m := multiset.Multiset{"a": 2, "b": 1}
 	s := m.String()
 	fmt.Println(s)
-	// Output:
+	// Example output:
 	// [a a b]
 }
 
@@ -33,7 +36,7 @@ func ExampleMultiset_Format() {
 	fmt.Println(m)         // Default format.
 	fmt.Printf("%q\n", m)  // Specified verb.
 	fmt.Printf("%#v\n", m) // Alternate formatting prints counts.
-	// Output:
+	// Example output:
 	// [a a b]
 	// ["a" "a" "b"]
 	// [a:2 b:1]
@@ -46,7 +49,7 @@ func ExampleMultiset_AssignCount() {
 	m.AssignCount("b", 3)
 	m.AssignCount("c", 1)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [c b b b]
 }
@@ -59,7 +62,7 @@ func ExampleMultiset_Normalize() {
 	m := multiset.Multiset(g)
 	m.Normalize()
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// map[a:2 b:-1]
 	// [a a]
 }
@@ -71,7 +74,7 @@ func ExampleMultiset_UnionElement() {
 	m.UnionElement("b", 3)
 	m.UnionElement("c", 1)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a a b b b c]
 }
@@ -83,7 +86,7 @@ func ExampleMultiset_Union() {
 	fmt.Println(m2)
 	m.Union(m2)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [b b b c]
 	// [a a b b b c]
@@ -95,7 +98,7 @@ func ExampleUnion() {
 	m3 := multiset.Multiset{"b": 3, "c": 1}
 	fmt.Println(m1, "∪", m2, "∪", m3)
 	fmt.Println(multiset.Union(m1, m2, m3))
-	// Output:
+	// Example output:
 	// [a a b] ∪ [] ∪ [b b b c]
 	// [a a b b b c]
 }
@@ -106,7 +109,7 @@ func ExampleMultiset_IntersectElement() {
 	m.IntersectElement("a", 1)
 	m.IntersectElement("c", 1)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a b]
 }
@@ -118,7 +121,7 @@ func ExampleMultiset_Intersect() {
 	fmt.Println(m2)
 	m.Intersect(m2)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [b b b c]
 	// [b]
@@ -130,7 +133,7 @@ func ExampleIntersect() {
 	m3 := multiset.Multiset{"b": 3, "c": 1}
 	fmt.Println(m1, "∩", m2, "∩", m3)
 	fmt.Println(multiset.Intersect(m1, m2, m3))
-	// Output:
+	// Example output:
 	// [a a b] ∩ [b b] ∩ [b b b c]
 	// [b]
 }
@@ -142,7 +145,7 @@ func ExampleSubset() {
 	fmt.Println(m1, "⊆", m1, multiset.Subset(m1, m1))
 	fmt.Println(m1, "⊆", m2, multiset.Subset(m1, m2))
 	fmt.Println(m2, "⊆", m3, multiset.Subset(m2, m3))
-	// Output:
+	// Example output:
 	// [a a] ⊆ [a a] true
 	// [a a] ⊆ [a a b] true
 	// [a a b] ⊆ [b b b c] false
@@ -154,7 +157,7 @@ func ExampleEqual() {
 	m3 := multiset.Multiset{"b": 1, "a": 2}
 	fmt.Println(m1, "==", m2, multiset.Equal(m1, m2))
 	fmt.Println(m2, "==", m3, multiset.Equal(m2, m3))
-	// Output:
+	// Example output:
 	// [a a] == [a a b] false
 	// [a a b] == [b a a] true
 }
@@ -162,7 +165,7 @@ func ExampleEqual() {
 func ExampleMultiset_Cardinality() {
 	m1 := multiset.Multiset{"a": 2, "b": 1}
 	fmt.Println(m1, m1.Cardinality())
-	// Output:
+	// Example output:
 	// [a a b] 3
 }
 
@@ -173,7 +176,7 @@ func ExampleMultiset_AddElementCount() {
 	fmt.Println(m1)
 	m1.AddElementCount("b", -2)
 	fmt.Println(m1)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a a a b]
 	// [a a a]
@@ -186,7 +189,7 @@ func ExampleMultiset_AddCount() {
 	fmt.Println(m2)
 	m.AddCount(m2)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [b b b c]
 	// [a a b b b b c]
@@ -198,7 +201,7 @@ func ExampleSum() {
 	m3 := multiset.Multiset{"b": 2, "c": 1}
 	fmt.Println(m1, "+", m2, "+", m3)
 	fmt.Println(multiset.Sum(m1, m2, m3))
-	// Output:
+	// Example output:
 	// [a a b] + [b] + [b b c]
 	// [a a b b b b c]
 }
@@ -210,7 +213,7 @@ func ExampleMultiset_SubtractCount() {
 	fmt.Println(m2)
 	m.SubtractCount(m2)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a b b c]
 	// [a]
@@ -221,7 +224,7 @@ func ExampleDifference() {
 	m2 := multiset.Multiset{"a": 1, "b": 2, "c": 1}
 	fmt.Println(m1, "-", m2)
 	fmt.Println(multiset.Difference(m1, m2))
-	// Output:
+	// Example output:
 	// [a a b] - [a b b c]
 	// [a]
 }
@@ -233,7 +236,7 @@ func ExampleMultiset_Scale() {
 	fmt.Println(m)
 	m.Scale(0)
 	fmt.Println(m)
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a a a a a a b b b]
 	// []
@@ -244,7 +247,7 @@ func ExampleScale() {
 	fmt.Println(m)
 	fmt.Println(multiset.Scale(m, 3))
 	fmt.Println(multiset.Scale(m, 0))
-	// Output:
+	// Example output:
 	// [a a b]
 	// [a a a a a a b b b]
 	// []
@@ -255,7 +258,7 @@ func ExampleMultiset_Contains() {
 	fmt.Println(m)
 	fmt.Println(m.Contains("a", 1))
 	fmt.Println(m.Contains("c", 0))
-	// Output:
+	// Example output:
 	// [a a b]
 	// true
 	// true
@@ -266,7 +269,7 @@ func ExampleMultiset_Mode() {
 	fmt.Println(m)
 	e, c := m.Mode()
 	fmt.Println(e, c)
-	// Output:
+	// Example output:
 	// [a a a b c c c]
 	// [a c] 3
 }
