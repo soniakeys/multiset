@@ -25,16 +25,11 @@
 // a normal Multiset.
 //
 // Formatted output of Multisets uses a custom formatter.  See method Format.
-//
-// With Go 1.3 and later, examples are for documentation purposes only and are
-// not executed by go test.  They worked under Go 1.2 because of a quirk that
-// the order of small maps was not randomized.  Oh, it could be addressed in
-// fancier ways, but it's work...  Anyway, mathematically, elements aren't
-// even required to be orderable, only testable for equality.
 package multiset
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -54,32 +49,35 @@ func (m Multiset) String() string {
 // and flags are ignored, except for the "alternate" flag, '#'.  The alternate
 // flag specifies to print elements followed by numeric counts, similar to
 // the way maps are normally printed.
+//
+// Multisets are unordered, but Format orders the formatted output.
+// Elements are formatted as strings, then sorted before final formatting
+// as a multiset.
 func (m Multiset) Format(f fmt.State, c rune) {
-	fmt.Fprint(f, "[")
+	var l []string
 	fs := "%" + string(c)
-	first := true
-	// alt fmt is element:count (otherwise elements are repeated)
 	if f.Flag('#') {
+		// alt fmt is element:count
+		l = make([]string, len(m))
 		fs += ":%d"
+		i := 0
 		for e, c := range m {
-			fmt.Fprintf(f, fs, e, c)
-			if first {
-				fs = " " + fs
-				first = false
-			}
+			l[i] = fmt.Sprintf(fs, e, c)
+			i++
 		}
 	} else {
+		// default fmt repeats elements
+		l = make([]string, m.Cardinality())
+		i := 0
 		for e, c := range m {
-			if first {
-				fmt.Fprintf(f, fs, e)
-				c--
-				fs = " " + fs
-				first = false
+			for j := 0; j < c; j++ {
+				l[i] = fmt.Sprintf(fs, e)
+				i++
 			}
-			fmt.Fprint(f, strings.Repeat(fmt.Sprintf(fs, e), c))
 		}
 	}
-	fmt.Fprint(f, "]")
+	sort.Strings(l)
+	fmt.Fprint(f, "["+strings.Join(l, " ")+"]")
 }
 
 // AssignCount assigns the count of element e the value c.
@@ -309,12 +307,19 @@ func (m Multiset) AddElementCount(e interface{}, dc int) {
 	m.AssignCount(e, m[e]+dc)
 }
 
-// AddCount sets the receiver m to the multiset sum of m and its
+// AddElements increments the count for each element in argument list l.
+func (m Multiset) AddElements(l ...interface{}) {
+	for _, e := range l {
+		m[e]++
+	}
+}
+
+// AddCounts sets the receiver m to the multiset sum of m and its
 // argument m2.
 //
 // The count of each element of m will be set to the the sum of the
 // counts in the corresponding elements of m and m2.
-func (m Multiset) AddCount(m2 Multiset) {
+func (m Multiset) AddCounts(m2 Multiset) {
 	for e, c := range m2 {
 		m[e] += c
 	}
@@ -344,7 +349,7 @@ func Sum(a ...Multiset) Multiset {
 	}
 	// sum the rest
 	for _, m2 := range a[1:] {
-		m.AddCount(m2)
+		m.AddCounts(m2)
 	}
 	return m
 }

@@ -1,11 +1,6 @@
 // Copyright 2014 Sonia Keys
 // License MIT: http://opensource.org/licenses/MIT
 
-//+build !go1.3
-
-// Examples here depend on deterministic ordering of small maps.
-// This worked in Go 1.2 but fails beginning with Go 1.3.
-
 package multiset_test
 
 import (
@@ -50,19 +45,19 @@ func ExampleMultiset_AssignCount() {
 	fmt.Println(m)
 	// Output:
 	// [a a b]
-	// [c b b b]
+	// [b b b c]
 }
 
 func ExampleMultiset_Normalize() {
 	// A map with a negative value.
 	g := map[interface{}]int{"a": 2, "b": -1}
-	fmt.Println(g)
+	fmt.Println(g["a"], g["b"])
 	// Convert and normalize.
 	m := multiset.Multiset(g)
 	m.Normalize()
 	fmt.Println(m)
 	// Output:
-	// map[a:2 b:-1]
+	// 2 -1
 	// [a a]
 }
 
@@ -172,7 +167,7 @@ func ExampleEqual() {
 	fmt.Println(m2, "==", m3, multiset.Equal(m2, m3))
 	// Output:
 	// [a a] == [a a b] false
-	// [a a b] == [b a a] true
+	// [a a b] == [a a b] true
 }
 
 func ExampleMultiset_Cardinality() {
@@ -195,17 +190,27 @@ func ExampleMultiset_AddElementCount() {
 	// [a a a]
 }
 
-func ExampleMultiset_AddCount() {
+func ExampleMultiset_AddCounts() {
 	m := multiset.Multiset{"a": 2, "b": 1}
 	m2 := multiset.Multiset{"b": 3, "c": 1}
 	fmt.Println(m)
 	fmt.Println(m2)
-	m.AddCount(m2)
+	m.AddCounts(m2)
 	fmt.Println(m)
 	// Output:
 	// [a a b]
 	// [b b b c]
 	// [a a b b b b c]
+}
+
+func ExampleMultiset_AddElements() {
+	m := multiset.Multiset{"a": 2, "b": 1}
+	fmt.Println(m)
+	m.AddElements("b", "c")
+	fmt.Println(m)
+	// Output:
+	// [a a b]
+	// [a a b b c]
 }
 
 func ExampleSum() {
@@ -281,7 +286,11 @@ func ExampleMultiset_Mode() {
 	m := multiset.Multiset{"a": 3, "b": 1, "c": 3}
 	fmt.Println(m)
 	e, c := m.Mode()
-	fmt.Println(e, c)
+	// (mode result order is indeterminate
+	// convert mode to a multiset just to leverage sorted output.)
+	d := multiset.Multiset{}
+	d.AddElements(e...)
+	fmt.Println(d, c)
 	// Output:
 	// [a a a b c c c]
 	// [a c] 3
