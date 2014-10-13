@@ -229,7 +229,7 @@ func ExampleMultiset_SubtractCount() {
 	m2 := multiset.Multiset{"a": 1, "b": 2, "c": 1}
 	fmt.Println(m)
 	fmt.Println(m2)
-	m.SubtractCount(m2)
+	m.SubtractCounts(m2)
 	fmt.Println(m)
 	// Output:
 	// [a a b]

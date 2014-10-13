@@ -354,13 +354,13 @@ func Sum(a ...Multiset) Multiset {
 	return m
 }
 
-// SubtractCount sets the receiver m to the multiset difference of m and its
+// SubtractCounts sets the receiver m to the multiset difference of m and its
 // argument m2.
 //
 // For each element that exists in both m and m2, the count in m will be
 // decreased by the count in m2.  If the resulting count is zero or negative,
 // the element is removed from m.
-func (m Multiset) SubtractCount(m2 Multiset) {
+func (m Multiset) SubtractCounts(m2 Multiset) {
 	for e, c := range m2 {
 		m.AssignCount(e, m[e]-c)
 	}
