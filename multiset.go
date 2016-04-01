@@ -386,7 +386,7 @@ func Difference(m1, m2 Multiset) Multiset {
 // Scale as a method increases the counts of all elements by the factor n.
 //
 // If n is zero or negative, the Multiset will be cleared.  (Scale(0) is an
-// efficent way of clearing a Multiset, short of abandoning it to the
+// efficient way of clearing a Multiset, short of abandoning it to the
 // garbage collector and creating a new one.)
 //
 // Overflow is not detected.
